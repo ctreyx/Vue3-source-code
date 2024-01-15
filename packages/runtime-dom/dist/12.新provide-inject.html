@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <div id="app"></div>
+    <!-- <script src="../../../node_modules/@vue/runtime-dom/dist/runtime-dom.global.js"></script> -->
+    <script src="./runtime-dom.global.js"></script>
+    <script>
+      // -->通过创建器实现渲染,用户按照自己想法渲染 , vnode
+      const {
+        createRenderer,
+        h,
+        render,
+        Text,
+        Fragment,
+        reactive,
+        onBeforeMount,
+        onBeforeUpdate,
+        onMounted,
+        onUpdated,
+        createElementVNode: _createElementVNode,
+        toDisplayString: _toDisplayString,
+        openBlock: _openBlock,
+        createElementBlock: _createElementBlock,
+        provide,
+        inject,
+      } = VueRuntimeDOM;
+
+
+      //  --> 实现原理是父组件新增provides属性，调用provide的时候读区属性存值
+      //  -->子组件会讲父组件的provides放自己身上
+      //  -->只能在setup中 -->在renderer patch中实现
+      const My = {
+        setup() {
+          let state = inject("VueComponent");
+
+          return {
+            state,
+          };
+        },
+        render() {
+          return h("h1", this.state.name);
+        },
+      };
+
+      const MyComponent = {
+        setup() {
+          const state = reactive({ name: "tx父亲" });
+          setTimeout(()=>{
+            state.name='123'
+          },1000)
+          provide("VueComponent", state); //-->跨级通讯,只能是父子孙关系，从上往下
+        },
+        render(_ctx) {
+          return h(My);
+        },
+      };
+
+      render(h(MyComponent), app);
+    </script>
+  </body>
+</html>

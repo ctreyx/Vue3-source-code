@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+
+  <script src="../node_modules/vue/dist/vue.global.js"></script>
+  <script>
+    const { ref, effect, reactive, toRefs, proxyRefs } = Vue;
+    const data = { name: 'tx' }
+    const arr = reactive([data])
+    //-->arr[0]取出的是代理对象，不是原始target
+    console.log(arr[0] === data);
+
+    //-->理应是true,但是因为arr中是代理对象，所以会是false,vue改写了数组方法，会返回原始target
+    console.log(arr.includes(data));
+
+
+    // 案列2
+    const proxyarr = reactive([ref(1), 2, 3])
+    const proxyobj = reactive({ name: ref('tx') })
+
+    proxyarr[0] = 100   //-->无法脱ref,必须.value取值.这样是直接将ref改为100
+    console.log('proxyarr', proxyarr[0]);
+    //-->如果是对象,vue是帮助脱ref实现，不需要.value
+    console.log('proxyobj', proxyobj.name);  
+  </script>
+
+</body>
+
+</html>

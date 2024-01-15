@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="app"></div>
+  <button id="button">点我啊</button>
+  <!-- <script src="../../../node_modules/@vue/reactivity/dist/reactivity.global.js"></script> -->
+  <script src="./reactivity.global.js"></script>
+  <script>
+
+    // VueReactivity -->源码中打包名称，我们自己定义保持一致
+    // effect --> 副作用函数，依赖的属性发生变化时，执行的函数
+    const { effect, reactive } = VueReactivity;
+    const state = reactive({ age: 12, name: '张三' })
+    console.log(state);
+    let nextAge
+    effect(() => {
+      app.innerHTML = `${state.name}-->今年${state.age}岁`
+    })
+
+    button.addEventListener('click', () => {
+      state.age++
+    });
+
+  </script>
+</body>
+
+</html>

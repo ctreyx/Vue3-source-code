@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+
+    <script src="./compiler-core.global.js"></script>
+
+    <script>
+        // -->解析就是一个个字符串判断，然后解析完毕后删除
+        let {compile} = VueCompilerCore
+        let r=compile(`abc <div>321 </div> {{abc}}`)
+        console.log(r);
+    </script>
+    
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="app"></div>
+  <script src="../../../node_modules/vue/dist/vue.global.js"></script>
+  <!-- <script src="./reactivity.global.js"></script> -->
+  <script>
+    const { ref, effect, reactive, toRefs, proxyRefs } = Vue;
+    // const { effect, reactive, ref, toRefs } = VueReactivity;
+    //-->ref的作用是使非对象转为响应数据，因为reactive只支持接收对象
+    // const v = ref(false);
+    // const v1 = ref('das');
+
+    // effect(() => {
+    //   app.innerHTML = v.value ? "你好,true" : "不好,false";
+    // });
+    // setTimeout(() => {
+    //   v.value = true
+    //   v1.value = '22'
+    // }, 1000)
+    // console.log(v1);
+
+    // 案例2
+    // 问题:-->每次使用都写school很麻烦-->reactive转为ref,正向转换
+
+    // const school = reactive({ name: "tx", age: "13" });
+    // // const {name,age}=school  //结构丧失响应式
+    // // -->可以通过toRefs结构
+    // const { name, age } = toRefs({ name: "tx", age: "13" });
+    // console.log(name);
+    // effect(() => {
+    //   app.innerHTML = `姓名:${name.value},岁数:${age.value}`;
+    // });
+    // setTimeout(() => {
+    //   age.value = 100
+    // }, 1000)
+
+    // 案例3
+    // 将ref转为proxy-->反向转换,不需要.value取值。
+    // 原理就是代理每次，判断是不是有__v_isRef属性，如果是返回.value
+    let name = ref('tx')
+    let age = ref('13')
+    let school = proxyRefs({ name, age })
+    console.log(school);
+    effect(() => {
+      app.innerHTML = `姓名:${school.name},岁数:${school.age}`;
+    })
+  </script>
+</body>
+
+</html>

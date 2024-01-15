@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+</head>
+
+<body>
+
+  <div id="app"></div>
+  <!-- <script src="../../../node_modules/@vue/runtime-dom/dist/runtime-dom.global.js"></script> -->
+  <script src="./runtime-dom.global.js"></script>
+  <script>
+    // -->通过创建器实现渲染,用户按照自己想法渲染
+    const { createRenderer, h, render, Text, Fragment } = VueRuntimeDOM;
+
+    /*  
+       createRenderer接受的对象,就是runtime-dom提供的renderOptions,
+        我们可以用封装好的，也可以自己自定义 
+   */
+
+    const VueComponent = {
+      data () {
+        return { name: 'tx', age: '18' }
+      },
+      render () {
+        setTimeout(() => {
+          // this.age++
+          // this.age++ //-->如果两次，会叠加，需要优化queueJob
+        }, 1000)
+        return (h('p', `姓名:${this.name},年龄:${this.age}`))
+      }
+    }
+    render(
+      h(VueComponent),
+      app
+    );
+
+
+  </script>
+</body>
+
+</html>

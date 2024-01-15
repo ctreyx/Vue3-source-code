@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <div id="app"></div>
+    <div id="root"></div>
+    <div id="abc"></div>
+    <!-- <script src="../../../node_modules/@vue/runtime-dom/dist/runtime-dom.global.js"></script> -->
+    <script src="./runtime-dom.global.js"></script>
+    <script>
+      // -->通过创建器实现渲染,用户按照自己想法渲染 , vnode
+      const {
+        createRenderer,
+        h,
+        render,
+        Text,
+        Fragment,
+        ref,
+        reactive,
+        toRefs,
+        Teleport,
+      } = VueRuntimeDOM;
+
+      //   Teleport-->就是指定挂载到其他dom,传送门
+      const MyComponent = {
+        setup() {
+          const flag = ref(true);
+          const handle = () => {
+            flag.value = false;
+          };
+          return {
+            flag,
+            handle,
+          };
+        },
+        render() {
+          return h(
+            "button",
+            { onClick: this.handle },
+            this.flag
+              ? h(Teleport, { to: "#root" }, [123, 321])
+              : h(Teleport, { to: "#abc" }, [h(Text, '321, 123')])
+          );
+        },
+      };
+
+      render(h(MyComponent), app);
+    </script>
+  </body>
+</html>

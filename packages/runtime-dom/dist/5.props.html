@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+</head>
+
+<body>
+
+  <div id="app"></div>
+  <!-- <script src="../../../node_modules/@vue/runtime-dom/dist/runtime-dom.global.js"></script> -->
+  <script src="./runtime-dom.global.js"></script>
+  <script>
+    // -->通过创建器实现渲染,用户按照自己想法渲染
+    const { createRenderer, h, render, Text, Fragment } = VueRuntimeDOM;
+
+
+
+    const VueComponent = {
+      data () {
+        return { name: 'tx', age: '18' }
+      },
+      props: { //-->必须注册，区分props与attrs
+        adress: String
+      },
+      render () {
+        // setTimeout(() => {
+        //   // 1.组件是单项数据，无法改变props的值
+        //   this.name = 'tx1'
+        //   // this.adress = 1
+
+        // }, 1000)
+        return (h('p', {
+          onClick: () => {
+            (this.name = 'sss')
+          }
+        }, `姓名:${this.name},年龄:${this.age},props:${this.adress},${this.$attrs.b}`))
+      }
+    }
+    render(
+      h(VueComponent, { adress: 'beijing', a: 1, b: 2 }),
+      app
+    );
+
+
+  </script>
+</body>
+
+</html>

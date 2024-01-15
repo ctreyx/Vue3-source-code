@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="app"></div>
+  <!-- <script src="../../../node_modules/@vue/runtime-dom/dist/runtime-dom.global.js"></script> -->
+  <script src="./runtime-dom.global.js"></script>
+  <script>
+    // -->通过创建器实现渲染,用户按照自己想法渲染
+    const { createRenderer, h, render, Text, Fragment, ref } = VueRuntimeDOM;
+
+    const MyComponent = {
+      setup (props, ctx) {
+        console.log(ctx);
+      },
+      render () {
+        return h(Fragment, [
+          h("div", this.$slots.header()),
+          h("div", this.$slots.footer()),
+        ]);
+      },
+    };
+    const VueComponent = {
+      render () {
+        //    children如果是对象，说明时插槽。props必须是null
+        return h(MyComponent, null, {
+          header: () => h("p", "header"),
+          footer: () => h("p", "footer"),
+        });
+      },
+    };
+    render(h(VueComponent, { onXxx: (e) => alert(e) }), app);
+  </script>
+</body>
+
+</html>

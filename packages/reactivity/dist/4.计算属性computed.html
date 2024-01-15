@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="app"></div>
+  <button id="button">点我啊</button>
+  <!-- <script src="../../../node_modules/@vue/reactivity/dist/reactivity.global.js"></script> -->
+  <script src="./reactivity.global.js"></script>
+  <script>
+    const { effect, computed, reactive, activeEffect } = VueReactivity;
+
+    // computed --> 特点缓存，基于effect,底层是类实现，是个实例
+    const state = reactive({ firstName: "tian", lastName: "xun" });
+    const fullName = computed({
+      get () {
+        // -->有缓存标识，多次取值只进入get一次，依赖没有变化，不会重新执行get
+        return state.firstName + state.lastName
+      },
+      set (newVal) {
+        console.log('newVal', newVal);
+
+      }
+    })
+
+    // const fullName = computed(() => {
+    //   // -->只传一个回调就是get
+    //   console.log("get");
+    //   return state.firstName + state.lastName;
+    // });
+
+    effect(() => {
+      app.innerHTML = `计算属性：${fullName.value}`;
+    })
+    //  fullName=100 -->不是重新赋值，是直接改变指向
+
+    // console.log("fullName", fullName.value);
+    // console.log("fullName1", fullName.value);
+    state.firstName = "tian1";   //这样会进入调度器
+    fullName.value = '更改了';   //-->这样会进入set
+    console.log("fullName", fullName.value);
+    console.log("fullName", fullName);
+  </script>
+</body>
+
+</html>

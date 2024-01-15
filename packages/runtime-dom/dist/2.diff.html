@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+</head>
+
+<body>
+  <!-- <div id="test" style="color: red">ewq</div> -->
+  <div id="app"></div>
+  <!-- <script src="../../../node_modules/@vue/runtime-dom/dist/runtime-dom.global.js"></script> -->
+  <script src="./runtime-dom.global.js"></script>
+  <script>
+    // -->通过创建器实现渲染,用户按照自己想法渲染
+    const { createRenderer, h, render, Text } = VueRuntimeDOM;
+
+    /*  
+       createRenderer接受的对象,就是runtime-dom提供的renderOptions,
+        我们可以用封装好的，也可以自己自定义 
+   */
+
+
+    // diff 1 : n1是元素，n2是text文本，前后不一致，需要删除老的，创建新的
+    render(
+      // 文本1
+      // h("h1", { style: { color: "red" } }, [h("span", "123"), "123"]),
+      // 文本2,前后都是文本
+      // h(Text, '更新前'),
+      h(
+        "div",
+        { style: { color: "red", fontSize: '30px' } },
+        "更新前的文本"
+      ),
+      // 比较属性3
+      // h("div", { style: { color: "red", fontSize: '20px' } }, "更新前"),
+
+      document.getElementById("app")
+    );
+
+    setTimeout(() => {
+      render(
+        // h(Text, '更新后的文本')
+
+        // 比较属性3
+        // h(
+        //   "div",
+        //   { style: { color: "blue" } },
+        //   "更新后的文本"
+        // )
+        // 文本
+        // h(
+        //   "div",
+        //   { style: { color: "blue" } },
+        //   [h("span", "更新后的文本"), "123"]
+        // )
+        h(
+          "div",
+          { style: { color: "red" } },
+          "更新后的文本"
+        )
+        ,
+
+        document.getElementById("app")
+      );
+    }, 1000);
+  </script>
+</body>
+
+</html>

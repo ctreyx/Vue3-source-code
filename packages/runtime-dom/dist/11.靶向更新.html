@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="app"></div>
+  <!-- <script src="../../../node_modules/@vue/runtime-dom/dist/runtime-dom.global.js"></script> -->
+  <script src="./runtime-dom.global.js"></script>
+  <script>
+    // -->通过创建器实现渲染,用户按照自己想法渲染 , vnode
+    const {
+      createRenderer,
+      h,
+      render,
+      Text,
+      Fragment,
+      ref,
+      reactive,
+      toRefs,
+      onBeforeMount,
+      onBeforeUpdate,
+      onMounted,
+      onUpdated,
+      createElementVNode: _createElementVNode,
+      toDisplayString: _toDisplayString,
+      openBlock: _openBlock,
+      createElementBlock: _createElementBlock,
+    } = VueRuntimeDOM;
+
+    //   靶向更新-->就是避免无效对比，只对比动态部分，例如{{name}},@click这类
+    const MyComponent = {
+      setup () {
+        const state = reactive({ name: "tx1" });
+
+        setTimeout(() => {
+          state.name = '23'
+        }, 1000)
+        return {
+          state
+        }
+      },
+      render (_ctx) {
+
+        const vnode =
+          (_openBlock(),
+            _createElementBlock("div", null, [
+              _createElementVNode("h1", null, "hello tx "),
+              _createElementVNode(
+                "span",
+                {
+                  onClick: () => {
+                    _ctx.name = 'txxxx'
+                  }
+                },
+                _toDisplayString(_ctx.state.name),
+                1 /* TEXT */  //--> 1表示靶向更新类型
+              ),
+            ]));
+        console.log(vnode);
+        return vnode;
+      },
+    };
+
+    render(h(MyComponent), app);
+  </script>
+</body>
+
+</html>

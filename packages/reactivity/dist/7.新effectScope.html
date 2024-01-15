@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <div id="app"></div>
+    <!-- <script src="../../../node_modules/vue/dist/vue.global.js"></script> -->
+    <script src="./reactivity.global.js"></script>
+    <script>
+      // const { ref, effect, reactive, toRefs, proxyRefs, effectScope } = Vue;
+      const { ref, effect, reactive, toRefs, proxyRefs, effectScope } = VueReactivity;
+
+      const state = reactive({ name: "tx" });
+
+      // const runner= effect(()=>{
+      //     console.log(state.name);
+      // })
+
+      // runner.effect.stop()
+
+      //  --> effectScope api 会返回scope,调用scope.run 会收集effect,调用stop会全部停止
+      let scope = effectScope();
+
+      console.log(scope);
+
+      // --> 案例1
+        // scope.run(() => {
+        //   effect(() => {
+        //     console.log(state.name);
+        //   });
+        //   effect(() => {
+        //     console.log(state.name);
+        //   });
+        // });
+
+      // -->案列2
+      scope.run(() => {
+        effect(() => {
+          console.log(state.name, "out");
+        });
+        //-->传入true，不受外界stop影响。传入false,外部stop,内部也stop
+        const inner = effectScope(true);
+        inner.run(() => {
+          effect(() => {
+            console.log(state.name, "inner");
+          });
+        });
+      });
+
+      scope.stop();
+
+      setTimeout(() => {
+        state.name = "tx1";
+      }, 1000);
+    </script>
+  </body>
+</html>

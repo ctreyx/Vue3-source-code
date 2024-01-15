@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="app"></div>
+  <!-- <script src="../../../node_modules/@vue/runtime-dom/dist/runtime-dom.global.js"></script> -->
+  <script src="./runtime-dom.global.js"></script>
+  <script>
+    // -->通过创建器实现渲染,用户按照自己想法渲染
+    const { createRenderer, h, render, Text, Fragment, ref } = VueRuntimeDOM;
+
+    const VueComponent = {
+      props: {
+        address: String, //2-->props的值可以直接在render使用，也可以在setup通过props接收
+      },
+      setup (props, { emit }) {
+
+        return () => {
+          return h('p', { onClick: () => emit('xxx', 'ok') }, 'ok')
+        }
+      },
+      render () {
+        return h('p', this.name + this.age + this.address); //address-->如果和props值相同，会优先得到setup返回的值
+      },
+    };
+    render(h(VueComponent, { onXxx: (e) => alert(e) }), app);
+  </script>
+</body>
+
+</html>

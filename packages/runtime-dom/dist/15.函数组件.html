@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <div id="app"></div>
+    <!-- <script src="../../../node_modules/@vue/runtime-dom/dist/runtime-dom.global.js"></script> -->
+    <script src="./runtime-dom.global.js"></script>
+
+    <script>
+      const {
+        createRenderer,
+        h,
+        render,
+        Text,
+        Fragment,
+        ref,
+        reactive,
+        toRefs,
+        defineAsyncComponent,
+      } = VueRuntimeDOM;
+
+      // --> vue3不区分函数式组件，因为setup本身就是函数式组件，所以不需要再次包装一层。
+      // --> 但是还是支持，只不过函数时组件没有setup,直接导出虚拟节点
+      // --> 新的vnode type ,需要在 createVnode 中判断--> renderer setupRenderEffect 中，根据类型生成 subTree 。
+      // --> 在initprops中，函数式没有注册props，所以他的attrs就是props
+      const functionalCom = (props) => {
+        return h('div', props.name);
+      };
+
+      render(h(functionalCom, { name: 'tx' }), app);
+    </script>
+  </body>
+</html>

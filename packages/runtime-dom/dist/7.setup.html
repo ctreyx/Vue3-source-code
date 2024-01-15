@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="app"></div>
+  <!-- <script src="../../../node_modules/@vue/runtime-dom/dist/runtime-dom.global.js"></script> -->
+  <script src="./runtime-dom.global.js"></script>
+  <script>
+    // -->通过创建器实现渲染,用户按照自己想法渲染
+    const { createRenderer, h, render, Text, Fragment, ref } = VueRuntimeDOM;
+
+    const VueComponent = {
+      props: {
+        address: String, //2-->props的值可以直接在render使用，也可以在setup通过props接收
+      },
+      setup (props) {
+        const name = ref("tx");
+        const age = ref("13");
+
+        setTimeout(() => {
+          age.value++;
+        }, 1000);
+        // return {
+        //   //-->1.setup会将返回的对象去掉.value,函数不会。（对象自动包裹proxyRefs)
+        //   name,
+        //   age,
+        //   address: props.address + "sichuan",
+        // };
+
+        // -3->setup可以返回函数取代render,但是不能去掉.value
+        return () => {
+          return h(Fragment, name.value + age.value);
+        };
+      },
+      // render () {
+      //   // -->children不能[]更新在于diff时n2没有走normalize校验是文本还是字符串
+      //   return h('p', this.name + this.age + this.address); //address-->如果和props值相同，会优先得到setup返回的值
+      // },
+    };
+    render(h(VueComponent, { address: "地球" }), app);
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="app"></div>
+  <button id="button">点我啊</button>
+  <!-- <script src="../../../node_modules/vue/dist/vue.global.js"></script> -->
+  <script src="./reactivity.global.js"></script>
+  <script>
+    // const { effect, reactive, watch } = Vue;
+    const { effect, reactive, watch } = VueReactivity;
+    const state = reactive({ age: 12, name: "张三", address: { a: 1, b: 2 } });
+
+    // 1-->监控对象无法获取新老值，因为他们引用地址都是相同。
+    // watch(state, (newVal, oldVal) => {
+    //   console.log(newVal, oldVal);
+    // })
+    // 2-->如果我们监控函数，便可以获取新老值
+    // watch(
+    //   () => state.address.a,
+    //   (newVal, oldVal) => {
+    //     console.log(newVal, oldVal);
+    //   }
+    // );
+    // button.addEventListener("click", () => {
+    //   state.address.b++
+    //   // state.age++
+    // })
+
+    // 案例2
+    let i = 2000;
+    function getData (timer) {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve(timer);
+        }, timer);
+      });
+    }
+    watch(
+      () => state.age,
+      async (newVal, oldVal, onCleanup) => {
+        let clear = false;
+        //   -->取消上一次渲染机制，如果调用第二次，将第一次onCleanup函数的clear改为true，不渲染，利用闭包机制
+        onCleanup(() => {
+          clear = true;
+        });
+        i -= 1000;
+        let r = await getData(i);
+        console.log(r);
+        if (!clear) {
+          document.body.innerHTML = r;
+        }
+        //   document.body.innerHTML = r;  //-->第一次传入1000，第二次传入0，应该展示第二次0，但是会1秒后展示1000
+      },
+      { flush: "sync" }
+    );
+    state.age = 21;
+    state.age = 22;
+  </script>
+</body>
+
+</html>

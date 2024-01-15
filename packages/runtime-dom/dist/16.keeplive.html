@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <div id="app"></div>
+    <!-- <script src="../../../node_modules/@vue/runtime-dom/dist/runtime-dom.global.js"></script> -->
+    <script src="./runtime-dom.global.js"></script>
+
+    <script>
+      const {
+        createRenderer,
+        h,
+        render,
+        Text,
+        Fragment,
+        ref,
+        reactive,
+        toRefs,
+        KeepAlive,
+        onMounted,
+      } = VueRuntimeDOM;
+
+      // keepAlive本身没有意义，只是将插槽vnode渲染出来。
+      //  max最大缓存策略，基于LRU算法，将最老的弹出去，缓存最新的。
+
+      const My1 = {
+        setup() {
+          onMounted(() => {
+            console.log('my1 onMounted');
+          });
+        },
+        render() {
+          return h('div', 'My1');
+        },
+      };
+      const My2 = {
+        setup() {
+          onMounted(() => {
+            console.log('my2 onMounted');
+          });
+        },
+        render() {
+          return h('div', 'My2');
+        },
+      };
+      const My3 = {
+        setup() {
+          onMounted(() => {
+            console.log('my3 onMounted');
+          });
+        },
+        render() {
+          return h('div', 'My3');
+        },
+      };
+
+      render(
+        h(
+          KeepAlive,
+          { max: 2 },
+          {
+            default: () => h(My1),
+          }
+        ),
+        app
+      );
+
+      setTimeout(() => {
+        render(
+          h(
+            KeepAlive,
+            { max: 2 },
+            {
+              default: () => h(My2),
+            }
+          ),
+          app
+        );
+      }, 1000);
+
+      setTimeout(() => {
+        render(
+          h(
+            KeepAlive,
+            { max: 2 },
+            {
+              default: () => h(My3),
+            }
+          ),
+          app
+        );
+      }, 2000);
+
+      setTimeout(() => {
+        render(
+          h(
+            KeepAlive,
+            { max: 2 },
+            {
+              default: () => h(My1),
+            }
+          ),
+          app
+        );
+      }, 3000);
+
+      setTimeout(() => {
+        render(
+          h(
+            KeepAlive,
+            { max: 2 },
+            {
+              default: () => h(My3),
+            }
+          ),
+          app
+        );
+      }, 4000);
+
+      // setTimeout(() => {
+      //   render(
+      //     h(
+      //       KeepAlive,
+      //       { max: 2 },
+      //       {
+      //         default: () => h(My1),
+      //       }
+      //     ),
+      //     app
+      //   );
+      // }, 5000);
+    </script>
+  </body>
+</html>

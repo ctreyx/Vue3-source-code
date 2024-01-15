@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="test" style="color: red">ewq</div>
+  <div id="app"></div>
+  <!-- <script src="../../../node_modules/@vue/runtime-dom/dist/runtime-dom.global.js"></script> -->
+  <script src="./runtime-dom.global.js"></script>
+  <script>
+    // -->通过创建器实现渲染,用户按照自己想法渲染
+    const { createRenderer, h, render, Text } = VueRuntimeDOM;
+
+    /*  
+       createRenderer接受的对象,就是runtime-dom提供的renderOptions,
+        我们可以用封装好的，也可以自己自定义 
+   */
+
+    render(
+      h("h1", { style: { color: "red", key: 'h1' } }, [
+        h("li", { key: "a" }, "a"),
+        h("li", { key: "b" }, "b"),
+
+        h("li", { key: "c" }, "c"),
+        h("li", { key: "d" }, "d"),
+        h("li", { key: "e" }, "e"),
+        h("li", { key: "f" }, "f"),
+
+        h("li", { key: "g" }, "g"),
+      ]),
+      app
+    );
+
+
+    setTimeout(() => {
+
+      render(
+        h("h1", { style: { color: "blue", key: 'h1' } }, [
+          h("li", { key: "a" }, "a"),
+          h("li", { key: "b" }, "b"),
+
+          h("li", { key: "f" }, "f"),
+          h("li", { key: "d" }, "d"),
+          h("li", { key: "e" }, "e"),
+          h("li", { key: "c" }, "c"),
+
+          h("li", { key: "g" }, "g"),
+        ]),
+        app
+      );
+    }, 1000)
+  </script>
+</body>
+
+</html>

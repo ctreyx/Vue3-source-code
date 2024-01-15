@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <div id="app"></div>
+    <div id="root"></div>
+    <div id="abc"></div>
+    <script src="../../../node_modules/@vue/runtime-dom/dist/runtime-dom.global.js"></script>
+    <!-- <script src="./runtime-dom.global.js"></script> -->
+    <script>
+      // -->通过创建器实现渲染,用户按照自己想法渲染 , vnode
+      const {
+        createRenderer,
+        h,
+        render,
+        Text,
+        Fragment,
+        ref,
+        reactive,
+        toRefs,
+        defineAsyncComponent,
+      } = VueRuntimeDOM;
+
+      // defineAsyncComponent--> 异步组件就是刚开始渲染一个空组件，组件加载完毕后渲染真组件
+      const MyComponent = {
+        render() {
+          return h("div", "异步组件");
+        },
+      };
+      const ErrorComponent = {
+        render() {
+          return h("div", "超时了");
+        },
+      };
+      const LoadingComponent = {
+        render() {
+          return h("div", "loading...");
+        },
+      };
+      //   实例1
+        // const asyncComponent = defineAsyncComponent(() => {
+        //   return new Promise((resolve, reject) => {
+        //     setTimeout(() => {
+        //       resolve(MyComponent);
+        //     }, 2000);
+        //   });
+        // });
+      // 实例2
+      const asyncComponent = defineAsyncComponent({
+        loader: () => {
+          return new Promise((resolve, reject) => {
+            setTimeout(() => {
+              reject(MyComponent);
+            }, 3000);
+          });
+        },
+        timeout: 2000,  //-->定义超时组件
+        errorComponent: ErrorComponent,
+        delay:1000,
+        loadingComponent:LoadingComponent, //-->todo
+        onError(errInf,retry,fail){
+          //-->加载失败,支持重试
+          console.log('加载失败',errInf);
+          fail()
+        }
+      });
+
+      render(h(asyncComponent), app);
+    </script>
+  </body>
+</html>

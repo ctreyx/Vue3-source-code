@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="test" style="color: red;">ewq</div>
+  <div id="app"></div>
+  <!-- <script src="../../../node_modules/@vue/runtime-dom/dist/runtime-dom.global.js"></script> -->
+  <script src="./runtime-dom.global.js"></script>
+  <script>
+    // -->通过创建器实现渲染,用户按照自己想法渲染
+    const { createRenderer, h, render, Text } = VueRuntimeDOM
+
+
+    /*  
+         createRenderer接受的对象,就是runtime-dom提供的renderOptions,
+          我们可以用封装好的，也可以自己自定义 
+     */
+
+    // let renderer = createRenderer({
+    //   createElement: (type, props) => {
+    //     return document.createElement(type)
+    //   },
+    //   setElementText: (el, text) => {
+    //     el.textContent = text
+    //   },
+    //   insert (el, parent, anchor) {
+    //     parent.insertBefore(el, anchor)
+    //   },
+    //   patchProp (el, key, prevValue, nextValue) {
+    //     el[key] = nextValue
+    //   },
+    // })
+
+    // renderer.render(h('h1', 'nihao'), app)
+
+
+    // 案例2 文本单独处理
+    render(h(Text, 123), document.getElementById("app"));
+    // render(
+    //   h("h1", { style: { color: "red" } }, [h("span", "12321,"), "nihao"]),
+    //   document.getElementById("app")
+    // );
+
+    // app.addEventListener('click', () => {
+    //   test.style.color = 'blue'
+    // })
+
+  </script>
+
+</body>
+
+</html>
